@@ -25,11 +25,17 @@ public class UsuarioController {
         Usuario novoUsuario = usuarioService.cadastrarUsuarioComCartao(usuarioCartaoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Integer id, @RequestBody UsuarioCartaoDTO usuarioCartaoDTO) {
+        Usuario usuarioAtualizado = usuarioService.atualizarUsuario(id, usuarioCartaoDTO);
+        return ResponseEntity.ok(usuarioAtualizado);
+    }
 
     @GetMapping
     public List<Usuario> listarTodos(){
         return usuarioService.listarTodos();
     }
+
     @GetMapping("/{id}")
     public Usuario buscarPorId(@PathVariable Integer id) {
         return usuarioService.buscarPorId(id);

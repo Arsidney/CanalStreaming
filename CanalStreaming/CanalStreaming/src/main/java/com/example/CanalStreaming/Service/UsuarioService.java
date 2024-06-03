@@ -3,7 +3,13 @@ package com.example.CanalStreaming.Service;
 import com.example.CanalStreaming.DTO.UsuarioCartaoDTO;
 import com.example.CanalStreaming.Model.*;
 import com.example.CanalStreaming.Repository.*;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,21 +18,76 @@ import java.util.List;
 @Service
 public class UsuarioService {
 
+
     private UsuarioRepository usuarioRepository;
     private CartaoCreditoRepository cartaoCreditoRepository;
-    private FilmesRepository filmesRepository; // Adicione isso
-    private SeriesRepository seriesRepository; // Adicione isso
-    private FavoritosRepository favoritosRepository; // Adicione isso
+    private FilmesRepository filmesRepository;
+    private SeriesRepository seriesRepository;
+    private FavoritosRepository favoritosRepository;
+
+    @Autowired
+    private JavaMailSender emailSender;
 
     public Usuario cadastrarUsuarioComCartao(UsuarioCartaoDTO usuarioCartaoDTO) {
         Usuario usuario = usuarioCartaoDTO.getUsuario();
         CartaoCredito cartaoCredito = usuarioCartaoDTO.getCartaoCredito();
 
+        String confirmationToken = RandomStringUtils.randomAlphanumeric(64);
+        usuario.setConfirmationToken(confirmationToken);
+
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
         cartaoCredito.setUsuario(usuarioSalvo);
         cartaoCreditoRepository.save(cartaoCredito);
 
+        enviarEmailConfirmacao(usuario.getEmail(), confirmationToken);
+
         return usuarioSalvo;
+    }
+    private void enviarEmailConfirmacao(String email, String confirmationToken) {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        try {
+            helper.setTo(email);
+            helper.setSubject("Confirmação de Cadastro");
+            helper.setText("Para confirmar seu cadastro, clique no seguinte link: http://seusite.com/confirmacao?token=" + confirmationToken);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        emailSender.send(message);
+    }
+    public boolean confirmarCadastro(String confirmationToken) {
+        Usuario usuario = usuarioRepository.findByConfirmationToken(confirmationToken)
+                .orElseThrow(() -> new RuntimeException("Token de confirmação inválido ou expirado."));
+
+        // Marcar o usuário como confirmado e limpar o token
+        usuario.setConfirmado(true);
+        usuario.setConfirmationToken(null);
+        usuarioRepository.save(usuario);
+
+        return true;
+    }
+    public Usuario atualizarUsuario(Integer id, UsuarioCartaoDTO usuarioCartaoDTO) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        CartaoCredito cartaoCredito = cartaoCreditoRepository.findByUsuarioId(id)
+                .orElseThrow(() -> new RuntimeException("Cartão de crédito não encontrado"));
+
+        usuario.setNomeCompleto(usuarioCartaoDTO.getUsuario().getNomeCompleto());
+        usuario.setDataNascimento(usuarioCartaoDTO.getUsuario().getDataNascimento());
+        usuario.setEmail(usuarioCartaoDTO.getUsuario().getEmail());
+        usuario.setSenha(usuarioCartaoDTO.getUsuario().getSenha());
+
+        cartaoCredito.setNumeroCartao(usuarioCartaoDTO.getCartaoCredito().getNumeroCartao());
+        cartaoCredito.setValidade(usuarioCartaoDTO.getCartaoCredito().getValidade());
+        cartaoCredito.setCodSeguranca(usuarioCartaoDTO.getCartaoCredito().getCodSeguranca());
+        cartaoCredito.setNomeTitular(usuarioCartaoDTO.getCartaoCredito().getNomeTitular());
+        cartaoCredito.setCpf(usuarioCartaoDTO.getCartaoCredito().getCpf());
+
+        usuarioRepository.save(usuario);
+        cartaoCreditoRepository.save(cartaoCredito);
+
+        return usuario;
     }
 
     public Favoritos adicionarFilmeFavorito(Integer usuarioId, Integer filmeId) {

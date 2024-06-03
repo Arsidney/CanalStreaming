@@ -27,10 +27,6 @@ public class FavoritosService {
                 .orElseThrow(() -> new RuntimeException("Favorito not found with id " + id));
     }
 
-    public Optional<Favoritos> buscarPorFilmeId(Integer filmeId) {
-        return favoritosRepository.findByFilmeId(filmeId);
-    }
-
     public Favoritos atualizar(Favoritos favoritos) {
         if (favoritos.getId() == null) {
             throw new RuntimeException("Favorito without ID");
