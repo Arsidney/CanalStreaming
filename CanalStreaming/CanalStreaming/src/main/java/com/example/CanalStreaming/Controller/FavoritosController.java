@@ -26,6 +26,15 @@ public class FavoritosController {
     public Favoritos adicionarSerieFavorita(@PathVariable Integer usuarioId, @PathVariable Integer serieId) {
         return usuarioService.adicionarSerieFavorita(usuarioId, serieId);
     }
+    @GetMapping("/filmes/{usuarioId}")
+    public List<Favoritos> listarFilmesFavoritos(@PathVariable Integer usuarioId) {
+        return usuarioService.listarFilmesFavoritos(usuarioId);
+    }
+
+    @GetMapping("/series/{usuarioId}")
+    public List<Favoritos> listarSeriesFavoritas(@PathVariable Integer usuarioId) {
+        return usuarioService.listarSeriesFavoritas(usuarioId);
+    }
 
     @DeleteMapping("/filme/{usuarioId}/{filmeId}")
     public ResponseEntity<Void> removerFilmeFavorito(@PathVariable Integer usuarioId, @PathVariable Integer filmeId) {

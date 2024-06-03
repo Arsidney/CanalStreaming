@@ -75,6 +75,13 @@ public class UsuarioService {
     public List<Favoritos> listarFavoritos(Integer usuarioId) {
         return favoritosRepository.findByUsuarioId(usuarioId);
     }
+    public List<Favoritos> listarFilmesFavoritos(Integer usuarioId) {
+        return favoritosRepository.findByUsuarioIdAndFilmeIdIsNotNull(usuarioId);
+    }
+
+    public List<Favoritos> listarSeriesFavoritas(Integer usuarioId) {
+        return favoritosRepository.findByUsuarioIdAndSerieIdIsNotNull(usuarioId);
+    }
 
     public Usuario buscarPorId(Integer id) {
         return usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));

@@ -12,4 +12,6 @@ public interface FavoritosRepository extends JpaRepository<Favoritos, Integer> {
     Optional<Favoritos> findByUsuarioIdAndFilmeId(Integer usuarioId, Integer filmeId);
     Optional<Favoritos> findByUsuarioIdAndSerieId(Integer usuarioId, Integer serieId);
     List<Favoritos> findByUsuarioId(Integer usuarioId);
+    List<Favoritos> findByUsuarioIdAndFilmeIdIsNotNull(Integer usuarioId);
+    List<Favoritos> findByUsuarioIdAndSerieIdIsNotNull(Integer usuarioId);
 }
