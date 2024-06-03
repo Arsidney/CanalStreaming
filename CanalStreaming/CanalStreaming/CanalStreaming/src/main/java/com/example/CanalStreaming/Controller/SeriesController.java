@@ -27,6 +27,11 @@ public class SeriesController {
         return seriesService.listarSeries();
     }
 
+    @GetMapping("/alfabetica")
+    public List<Series> listarSeriesOrdemAlfabetica() {
+        return seriesService.listarSeriesOrdemAlfabetica();
+    }
+
     @GetMapping("/titulo/{titulo}")
     public Optional<Series> buscarPorTitulo(@PathVariable String titulo) {
         return seriesService.buscarPorTitulo(titulo);

@@ -13,17 +13,17 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class UsuarioService {
 
-
-    private UsuarioRepository usuarioRepository;
-    private CartaoCreditoRepository cartaoCreditoRepository;
-    private FilmesRepository filmesRepository;
-    private SeriesRepository seriesRepository;
-    private FavoritosRepository favoritosRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final CartaoCreditoRepository cartaoCreditoRepository;
+    private final FilmesRepository filmesRepository;
+    private final SeriesRepository seriesRepository;
+    private final FavoritosRepository favoritosRepository;
 
     @Autowired
     private JavaMailSender emailSender;
@@ -43,6 +43,7 @@ public class UsuarioService {
 
         return usuarioSalvo;
     }
+
     private void enviarEmailConfirmacao(String email, String confirmationToken) {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -55,6 +56,7 @@ public class UsuarioService {
         }
         emailSender.send(message);
     }
+
     public boolean confirmarCadastro(String confirmationToken) {
         Usuario usuario = usuarioRepository.findByConfirmationToken(confirmationToken)
                 .orElseThrow(() -> new RuntimeException("Token de confirmação inválido ou expirado."));
@@ -66,6 +68,7 @@ public class UsuarioService {
 
         return true;
     }
+
     public Usuario atualizarUsuario(Integer id, UsuarioCartaoDTO usuarioCartaoDTO) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -103,6 +106,7 @@ public class UsuarioService {
 
         return favoritosRepository.save(favoritos);
     }
+
     public void removerFilmeFavorito(Integer usuarioId, Integer filmeId) {
         Favoritos favoritos = favoritosRepository.findByUsuarioIdAndFilmeId(usuarioId, filmeId)
                 .orElseThrow(() -> new RuntimeException("Filme favorito não encontrado"));
@@ -123,6 +127,7 @@ public class UsuarioService {
 
         return favoritosRepository.save(favoritos);
     }
+
     public void removerSerieFavorita(Integer usuarioId, Integer serieId) {
         Favoritos favoritos = favoritosRepository.findByUsuarioIdAndSerieId(usuarioId, serieId)
                 .orElseThrow(() -> new RuntimeException("Série favorita não encontrada"));
@@ -133,9 +138,11 @@ public class UsuarioService {
     public List<Usuario> listarTodos() {
         return usuarioRepository.findAll();
     }
+
     public List<Favoritos> listarFavoritos(Integer usuarioId) {
         return favoritosRepository.findByUsuarioId(usuarioId);
     }
+
     public List<Favoritos> listarFilmesFavoritos(Integer usuarioId) {
         return favoritosRepository.findByUsuarioIdAndFilmeIdIsNotNull(usuarioId);
     }
@@ -152,4 +159,5 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 }
+
 

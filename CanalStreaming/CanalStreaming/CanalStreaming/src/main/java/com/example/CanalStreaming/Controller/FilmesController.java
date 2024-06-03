@@ -25,6 +25,11 @@ public class FilmesController {
         return filmesService.listarFilmes();
     }
 
+    @GetMapping("/alfabetica")
+    public List<Filmes> listarFilmesOrdemAlfabetica() {
+        return filmesService.listarFilmesOrdemAlfabetica();
+    }
+
     @GetMapping("/titulo")
     public Optional<Filmes> buscarPorTitulo(@RequestParam String titulo) {
         return filmesService.buscarPorTitulo(titulo);

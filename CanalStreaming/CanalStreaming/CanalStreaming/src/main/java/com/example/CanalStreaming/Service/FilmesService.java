@@ -3,6 +3,7 @@ package com.example.CanalStreaming.Service;
 import com.example.CanalStreaming.Model.Filmes;
 import com.example.CanalStreaming.Repository.FilmesRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public class FilmesService {
         return filmesRepository.findAll();
     }
 
+    public List<Filmes> listarFilmesOrdemAlfabetica() {
+        return filmesRepository.findAll(Sort.by(Sort.Direction.ASC, "titulo"));
+    }
 
     public Filmes buscarPorId(Integer id) {
         return filmesRepository.findById(id).get();

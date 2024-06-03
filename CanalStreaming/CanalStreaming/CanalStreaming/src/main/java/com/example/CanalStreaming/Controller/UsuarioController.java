@@ -2,6 +2,7 @@ package com.example.CanalStreaming.Controller;
 
 import com.example.CanalStreaming.DTO.UsuarioCartaoDTO;
 import com.example.CanalStreaming.Model.CartaoCredito;
+import com.example.CanalStreaming.Model.Favoritos;
 import com.example.CanalStreaming.Model.Usuario;
 import com.example.CanalStreaming.Service.CartaoCreditoService;
 import com.example.CanalStreaming.Service.UsuarioService;
@@ -17,8 +18,8 @@ import java.util.List;
 @RequestMapping("/Usuario")
 public class UsuarioController {
 
-    private UsuarioService usuarioService;
-    private CartaoCreditoService cartaoCreditoService;
+    private final UsuarioService usuarioService;
+    private final CartaoCreditoService cartaoCreditoService;
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Usuario> salvar(@RequestBody UsuarioCartaoDTO usuarioCartaoDTO) {
@@ -51,5 +52,22 @@ public class UsuarioController {
     public void deletarPorId(@PathVariable Integer id) {
         usuarioService.deletarPorId(id);
     }
+
+    // Endpoints para favoritos
+    @GetMapping("/{id}/favoritos")
+    public List<Favoritos> listarFavoritos(@PathVariable Integer id) {
+        return usuarioService.listarFavoritos(id);
+    }
+
+    @GetMapping("/{id}/favoritos/filmes")
+    public List<Favoritos> listarFilmesFavoritos(@PathVariable Integer id) {
+        return usuarioService.listarFilmesFavoritos(id);
+    }
+
+    @GetMapping("/{id}/favoritos/series")
+    public List<Favoritos> listarSeriesFavoritas(@PathVariable Integer id) {
+        return usuarioService.listarSeriesFavoritas(id);
+    }
 }
+
 
