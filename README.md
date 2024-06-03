@@ -9,3 +9,4 @@ Pré-requisitos
 Contribuição
 - Arsidney Martins Rocha
 - Tiago Oliveira Lelis Dos Santos
+- João Eduardo Evangelista Elias
