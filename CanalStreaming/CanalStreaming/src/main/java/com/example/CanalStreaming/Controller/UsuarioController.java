@@ -36,7 +36,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletarPorId(Integer id){
+    public void deletarPorId(@PathVariable Integer id){
         usuarioService.deletarPorId(id);
     }
 }

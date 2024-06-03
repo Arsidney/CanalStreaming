@@ -27,8 +27,8 @@ public class SeriesController {
         return seriesService.listarSeries();
     }
 
-    @GetMapping("/titulo") // por titulo
-    public Optional<Series> buscarPorTitulo(@RequestParam String titulo) {
+    @GetMapping("/titulo/{titulo}")
+    public Optional<Series> buscarPorTitulo(@PathVariable String titulo) {
         return seriesService.buscarPorTitulo(titulo);
     }
 

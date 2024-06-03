@@ -1,43 +1,46 @@
 package com.example.CanalStreaming.Controller;
 
 import com.example.CanalStreaming.Model.Favoritos;
-import com.example.CanalStreaming.Service.FavoritosService;
+import com.example.CanalStreaming.Repository.FavoritosRepository;
+import com.example.CanalStreaming.Service.UsuarioService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/Favoritos")
+@RequestMapping("/favoritos")
 public class FavoritosController {
 
-    private final FavoritosService favoritosService;
+    private final UsuarioService usuarioService;
+    private final FavoritosRepository favoritosRepository;
 
-    @PostMapping
-    public Favoritos salvar(@RequestBody Favoritos favoritos) {
-        return favoritosService.salvar(favoritos);
+    @PostMapping("/filme/{usuarioId}/{filmeId}")
+    public Favoritos adicionarFilmeFavorito(@PathVariable Integer usuarioId, @PathVariable Integer filmeId) {
+        return usuarioService.adicionarFilmeFavorito(usuarioId, filmeId);
     }
 
-    @GetMapping
-    public List<Favoritos> listarFavoritos() {
-        return favoritosService.listarFavoritos();
+    @PostMapping("/serie/{usuarioId}/{serieId}")
+    public Favoritos adicionarSerieFavorita(@PathVariable Integer usuarioId, @PathVariable Integer serieId) {
+        return usuarioService.adicionarSerieFavorita(usuarioId, serieId);
     }
 
-    @GetMapping("/titulo")
-    public Optional<Favoritos> buscarPorFilmeId(@RequestParam Integer filmeId) {
-        return favoritosService.buscarPorFilmeId(filmeId);
+    @DeleteMapping("/filme/{usuarioId}/{filmeId}")
+    public ResponseEntity<Void> removerFilmeFavorito(@PathVariable Integer usuarioId, @PathVariable Integer filmeId) {
+        usuarioService.removerFilmeFavorito(usuarioId, filmeId);
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}")
-    public Favoritos buscarPorId(@PathVariable Integer id) {
-        return favoritosService.buscarPorId(id);
+    @DeleteMapping("/serie/{usuarioId}/{serieId}")
+    public ResponseEntity<Void> removerSerieFavorita(@PathVariable Integer usuarioId, @PathVariable Integer serieId) {
+        usuarioService.removerSerieFavorita(usuarioId, serieId);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
-    public void deletarPorId(@PathVariable Integer id) {
-        favoritosService.deletarPorId(id);
+    @GetMapping("/{usuarioId}")
+    public List<Favoritos> listarFavoritos(@PathVariable Integer usuarioId) {
+        return usuarioService.listarFavoritos(usuarioId);
     }
 }
-

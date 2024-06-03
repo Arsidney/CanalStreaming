@@ -1,12 +1,11 @@
 package com.example.CanalStreaming.Model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,5 +23,7 @@ public class Filmes {
     private String relevancia;
     private String sinopse;
     private String trailer;
+    @OneToMany(mappedBy = "filme", cascade = CascadeType.ALL)
+    private List<Favoritos> favoritos;
 
 }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @Controller
-@RestController
 @RequestMapping("/UsuarioLogin")
 public class UsuarioLoginController {
 
@@ -25,8 +24,9 @@ public class UsuarioLoginController {
 
     @PostMapping("/login")
     public String login(Usuario usuario) {
-
-        return "redirect:/";
+        // Lógica de autenticação aqui
+        return "redirect:/"; // Redirecionar após o login
     }
 }
+
 
