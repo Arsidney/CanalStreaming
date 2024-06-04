@@ -31,7 +31,7 @@ Para executar este projeto localmente, siga estas etapas:
    mvn spring-boot:run
   Certifique-se de ter o Maven instalado em seu sistema. Você pode instalá-lo seguindo as instruções em Maven Installation.
   
-7. Após a inicialização, você poderá acessar o aplicativo em [http://localhost:8080](http://localhost:8080).
+7. Após a inicialização, você poderá acessar o aplicativo em [[http://localhost:8080](http://localhost:8080/swagger-ui/index.html#/).
 
 8. Divirta-se explorando e experimentando as funcionalidades do CanalStreaming!
 
